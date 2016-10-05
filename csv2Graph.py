@@ -10,7 +10,6 @@ import sys
 import networkx as nx
 
 
-
 class csv2Graph(object):
     """
     The class that handles csv file related I/O processes.
@@ -29,6 +28,9 @@ class csv2Graph(object):
                 # dict[1] is row-based.
                 rawdata = [dict(), dict()]
                 for linum, row in enumerate(csvdata):
+                	# first line doesn't contain useful data.
+                    if linum == 0:
+                    	continue
                     for rank, data in enumerate(row):
                         # Add column-based data.
                         try:
@@ -44,7 +46,7 @@ class csv2Graph(object):
                             rawdata[1][linum].append(data)
             self.rawdata = rawdata
         except IOError:
-            sys.exit("File \'{0}\' open failed!\n".format(file) + \
+            sys.exit("File \'{0}\' open failed!\n".format(file) +
                      "Check if the file name is correct.\n")
             
     def createNodeList(self, column):
@@ -66,7 +68,7 @@ class csv2Graph(object):
         e.g.
         nodes as title of the book;
         column as student major(science, engineering, medical, etc.)
-        Generated edges with connect book titles that were borrowed from 
+        Generated edges with connect book titles that were borrowed from
         the same student major.
         """
         edges = dict()
@@ -79,18 +81,17 @@ class csv2Graph(object):
                                (end[nodes[0]] in nodes[1])
                     related = (start[key] in value[1]) and \
                               (start[key] == end[key])
-                    #print(i, j, related, included)
                     if i != j and related and included:
                         try:
-                            edges[(start[nodes[0]], end[nodes[0]])]["weight"] \
-                            += 1
+                            edges[(start[nodes[0]],
+                                  end[nodes[0]])]["weight"] += 1
                         except KeyError:
                             edges[(start[nodes[0]], end[nodes[0]])] = dict()
-                            edges[(start[nodes[0]], end[nodes[0]])]["weight"] \
-                            = 1
+                            edges[(start[nodes[0]],
+                                  end[nodes[0]])]["weight"] = 1
         return edges
         
-    def createGraph(self, nodes, edges):                                                
+    def createGraph(self, nodes, edges):
         "Create a graph object using given nodes and edges."
         G = nx.Graph()
         # Add nodes to the graph.
@@ -98,4 +99,6 @@ class csv2Graph(object):
         # Add edges to the graph.
         G.add_edges_from(edges.keys())
         # Add weights to edges.
+        for a, b in edges.keys():
+        	G[a][b]["weight"] = edges[(a, b)]["weight"]        
         return G
