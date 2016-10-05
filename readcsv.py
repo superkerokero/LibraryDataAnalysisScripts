@@ -2,29 +2,19 @@
 # coding: utf-8
 
 "The scipt that handles csv input."
-import csv
-import sys
+import csv2Graph
+import matplotlib.pyplot as plt
+import networkx as nx
 
-
-def readData(file):
-    "Read data from given csv file and store it in a list."
-    try:
-    	# Open csv file with shift-jis encoding for Japanese support.
-        with open(file, encoding='shift-jis') as csvfile:
-            csvdata = csv.reader(csvfile, dialect='excel')
-            rawdata = dict()
-            for row in csvdata:
-            	for rank, data in enumerate(row):
-            		try:
-            			rawdata[rank].append(data)
-            		except:
-            		    rawdata[rank] = list()
-            		    rawdata[rank].append(data)
-            return rawdata
-    except IOError:
-        sys.exit("File \'{0}\' open failed!".format(file))
 
 
 if __name__ == "__main__":
-    rawdata = readData("libsample.csv")
-    print(rawdata[2][100])
+    csvobj = csv2Graph.csv2Graph("data/libsample.csv")
+    nodes = csvobj.createNodeList(7)
+    relation = csvobj.createNodeList(11)
+    edges = csvobj.createEdgeList(nodes, {11:relation})
+    graph = csvobj.createGraph(nodes, edges)
+    nx.draw(graph)
+    print(nodes, edges)
+    print("Number of edges in graph: ", graph.number_of_edges())
+    plt.show()
