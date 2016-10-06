@@ -5,15 +5,40 @@
 import csv2Graph
 import matplotlib.pyplot as plt
 import networkx as nx
+import argparse
+
+
+def cmdParse():
+    "Parse the command line argument for parameters."
+    parser = argparse.ArgumentParser(description="Generate GraphML file " +
+                                     "from csv file.")
+    parser.add_argument("-i", nargs="?", dest="input_file_name",
+                        default="data/libsample.csv", metavar="filename",
+                        help="input csv file name.")
+    parser.add_argument("-o", nargs="?", dest="output_file_name",
+                        default="example.graphml", metavar="filename",
+                        help="output file name for generated GraphML file.")
+    parser.add_argument("--show", action="store_true", dest="show_graph",
+                        help="Show generated graph using matplotlib.")
+    parser.add_argument("--node", nargs="?", dest="node",
+                        default=7, metavar="column number",
+                        help="Column number of data used to generate nodes.")
+    parser.add_argument("--relation", nargs="?", dest="relation",
+                        default=11, metavar="column number",
+                        help="Column number of data used to build relations " +
+                        "between nodes.")
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
-    csvobj = csv2Graph.csv2Graph("data/libsample.csv")
-    nodes = csvobj.createNodeList(7)
-    relation = csvobj.createNodeList(1)
-    edges = csvobj.createEdgeList(nodes, {1: relation})
+    args = cmdParse()
+    csvobj = csv2Graph.csv2Graph(args.input_file_name)
+    nodes = csvobj.createNodeList(args.node)
+    relation = csvobj.createNodeList(args.relation)
+    edges = csvobj.createEdgeList(nodes, {args.relation: relation})
     graph = csvobj.createGraph(nodes, edges)
     nx.draw(graph)
-    nx.write_graphml(graph, "test.graphml")
+    nx.write_graphml(graph, args.output_file_name)
     print("Number of edges in graph: ", graph.number_of_edges())
-    plt.show()
+    if args.show_graph:
+        plt.show()
