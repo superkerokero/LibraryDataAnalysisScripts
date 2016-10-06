@@ -33,9 +33,9 @@ def cmdParse():
 if __name__ == "__main__":
     args = cmdParse()
     csvobj = csv2Graph.csv2Graph(args.input_file_name)
-    nodes = csvobj.createNodeList(args.node)
-    relation = csvobj.createNodeList(args.relation)
-    edges = csvobj.createEdgeList(nodes, {args.relation: relation})
+    nodes = csvobj.createNodeList(int(args.node))
+    relation = csvobj.createNodeList(int(args.relation))
+    edges = csvobj.createEdgeList(nodes, {int(args.relation): relation})
     graph = csvobj.createGraph(nodes, edges)
     nx.draw(graph)
     nx.write_graphml(graph, args.output_file_name)
