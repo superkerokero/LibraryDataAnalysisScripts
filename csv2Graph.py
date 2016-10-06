@@ -28,9 +28,9 @@ class csv2Graph(object):
                 # dict[1] is row-based.
                 rawdata = [dict(), dict()]
                 for linum, row in enumerate(csvdata):
-                	# first line doesn't contain useful data.
+                    # first line doesn't contain useful data.
                     if linum == 0:
-                    	continue
+                        continue
                     for rank, data in enumerate(row):
                         # Add column-based data.
                         try:
@@ -39,25 +39,30 @@ class csv2Graph(object):
                             rawdata[0][rank] = list()
                             rawdata[0][rank].append(data)
                         # Add row-based data.
+                        # For consistency, linum - 1 is used for numbering.
                         try:
-                            rawdata[1][linum].append(data)
+                            rawdata[1][linum-1].append(data)
                         except KeyError:
-                            rawdata[1][linum] = list()
-                            rawdata[1][linum].append(data)
+                            rawdata[1][linum-1] = list()
+                            rawdata[1][linum-1].append(data)
             self.rawdata = rawdata
         except IOError:
             sys.exit("File \'{0}\' open failed!\n".format(file) +
                      "Check if the file name is correct.\n")
-            
+
     def createNodeList(self, column):
         "Create a node list from the generated rawdata and given column."
         # create an empty node set.
-        nodes = set()
+        nodes = dict()
         for data in self.rawdata[0][column]:
             if data != "":
-                nodes.add(data)
+                try:
+                    nodes[data]["population"] += 1
+                except KeyError:
+                    nodes[data] = dict()
+                    nodes[data]["population"] = 1
         return (column, nodes)
-        
+
     def createEdgeList(self, nodes, relationships):
         """
         Create an edge list based on given node list and the relationship.
@@ -90,15 +95,20 @@ class csv2Graph(object):
                             edges[(start[nodes[0]],
                                   end[nodes[0]])]["weight"] = 1
         return edges
-        
+
     def createGraph(self, nodes, edges):
         "Create a graph object using given nodes and edges."
         G = nx.Graph()
         # Add nodes to the graph.
         G.add_nodes_from(nodes[1])
+        # Add attributes to nodes.
+        for a in nodes[1].keys():
+            for attr in nodes[1][a]:
+                G.node[a][attr] = nodes[1][a][attr]
         # Add edges to the graph.
         G.add_edges_from(edges.keys())
-        # Add weights to edges.
+        # Add attributes to edges.
         for a, b in edges.keys():
-        	G[a][b]["weight"] = edges[(a, b)]["weight"]        
+            for attr in edges[(a, b)]:
+                G[a][b][attr] = edges[(a, b)][attr]
         return G
