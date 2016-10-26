@@ -8,7 +8,6 @@ import networkx as nx
 import argparse
 
 
-
 def cmdParse():
     "Parse the command line argument for parameters."
     parser = argparse.ArgumentParser(description="Generate GraphML file " +
@@ -33,11 +32,20 @@ def cmdParse():
 
 if __name__ == "__main__":
     args = cmdParse()
+    print("Reading excel file into dataframe...")
     xlsxobj = excel2Graph.excel2Graph(args.input_file_name)
+    print("Creating nodes...")
     nodes = xlsxobj.createNodeList(int(args.node))
-    relation = xlsxobj.createNodeList(int(args.relation))
-    edges = xlsxobj.createEdgeList(int(args.node), nodes,
-                                   {int(args.relation): relation})
+    # print("Creating relation nodes...")
+    # relation = xlsxobj.createNodeList(int(args.relation))
+    # edges = xlsxobj.createEdgeList(int(args.node), nodes,
+    #                                {int(args.relation): relation})
+    # section = xlsxobj.separateByMonth()
+    print("Generating edges...")
+    # edges = xlsxobj.createEdgeListSection(int(args.node), nodes,
+    #                                       {int(args.relation): relation},
+    #                                       (0, 1000))
+    edges = xlsxobj.fastEdgeList(int(args.node), int(args.relation))
     graph = xlsxobj.createGraph(nodes, edges)
     nx.draw(graph)
     nx.write_graphml(graph, args.output_file_name)
