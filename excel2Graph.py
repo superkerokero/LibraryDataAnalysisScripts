@@ -31,9 +31,9 @@ class excel2Graph(object):
                 nodes[data[column]] = dict()
                 nodes[data[column]]["population"] = 1
                 # Add other attributes for the first time.
-                nodes[data[column]]["major"] = data[9]
-                nodes[data[column]]["grade"] = data[7]
-                nodes[data[column]]["state"] = data[8]
+                # nodes[data[column]]["major"] = data[9]
+                # nodes[data[column]]["grade"] = data[7]
+                # nodes[data[column]]["state"] = data[8]
         return nodes
 
     def findRelation(self, col_nodes, col_relation):
@@ -50,15 +50,20 @@ class excel2Graph(object):
     def createEdgeListFromRaw(self, raw):
         "Generate edge list from raw edge list."
         edges = dict()
-        for data in raw.values():
+        # for data in raw.values():
+        for name, data in raw.items():
             if len(data) > 1:
                 for i in range(len(data)):
                     for j in range(i, len(data)):
                         try:
                             edges[(data[i], data[j])]["weight"] += 1
+                            """edges[(data[i], data[j])]["contents"] = \
+                               edges[(data[i], data[j])]["contents"] + \
+                               '\n' + name """
                         except KeyError:
                             edges[(data[i], data[j])] = dict()
                             edges[(data[i], data[j])]["weight"] = 1
+                            # edges[(data[i], data[j])]["contents"] = name
         return edges
 
     def fastEdgeList(self, col_nodes, col_relation):
