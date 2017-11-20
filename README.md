@@ -1,5 +1,6 @@
 # LibraryDataAnalysisScripts
 
+[![Build Status](https://travis-ci.org/superkerokero/LibraryDataAnalysisScripts.svg?branch=master)](https://travis-ci.org/superkerokero/LibraryDataAnalysisScripts)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d2ebdffd6309a24813ee/maintainability)](https://codeclimate.com/github/superkerokero/LibraryDataAnalysisScripts/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/d2ebdffd6309a24813ee/test_coverage)](https://codeclimate.com/github/superkerokero/LibraryDataAnalysisScripts/test_coverage)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
