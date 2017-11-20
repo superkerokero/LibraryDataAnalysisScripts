@@ -1,10 +1,9 @@
 # LibraryDataAnalysisScripts
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/d2ebdffd6309a24813ee/maintainability)](https://codeclimate.com/github/superkerokero/LibraryDataAnalysisScripts/maintainability)
-
 [![Test Coverage](https://api.codeclimate.com/v1/badges/d2ebdffd6309a24813ee/test_coverage)](https://codeclimate.com/github/superkerokero/LibraryDataAnalysisScripts/test_coverage)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 This program can be used to generate graphs stored in GraphML format from csv/excel files that contain relatable data.
 
